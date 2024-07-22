@@ -72,5 +72,33 @@ namespace EmployeeAdminPortal.Controllers
             // Returns an HTTP 200 OK response with the newly created employee entity
             return Ok(employeeEntity);
         }
+
+        // Action method to handle HTTP PUT requests and update an existing employee
+        [HttpPut]
+        [Route("{id:guid}")]
+        public IActionResult UpdateEmployee(Guid id, UpdateEmployeeDto updateEmployeeDto)
+        {
+            // Retrieves the employee with the specified ID from the database
+            var employee = dbContext.Employees.Find(id);
+
+            // Checks if the employee was found
+            if (employee is null) 
+            {
+                // Returns an HTTP 404 Not Found response if the employee was not found
+                return NotFound();
+            }
+
+            // Updates the employee entity with the provided data
+            employee.Name = updateEmployeeDto.Name;
+            employee.Email = updateEmployeeDto.Email;
+            employee.Phone = updateEmployeeDto.Phone;
+            employee.Salary = updateEmployeeDto.Salary;
+
+            // Saves changes to the database
+            dbContext.SaveChanges();
+
+            // Returns an HTTP 200 OK response with the updated employee entity
+            return Ok(employee);
+        }
     }
 }
