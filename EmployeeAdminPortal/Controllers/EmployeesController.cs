@@ -100,5 +100,30 @@ namespace EmployeeAdminPortal.Controllers
             // Returns an HTTP 200 OK response with the updated employee entity
             return Ok(employee);
         }
+
+        // Action method to handle HTTP DELETE requests and delete an employee by ID
+        [HttpDelete]
+        [Route("{id:guid}")]
+        public IActionResult DeleteEmployee(Guid id) 
+        {
+            // Retrieves the employee with the specified ID from the database
+            var employee = dbContext.Employees.Find(id);
+
+            // Checks if the employee was found
+            if (employee is null)
+            {
+                // Returns an HTTP 404 Not Found response if the employee was not found
+                return NotFound();
+            }
+
+            // Removes the employee entity from the database context
+            dbContext.Employees.Remove(employee);
+
+            // Saves changes to the database
+            dbContext.SaveChanges();
+
+            // Returns an HTTP 200 OK response indicating successful deletion
+            return Ok();
+        }
     }
 }
