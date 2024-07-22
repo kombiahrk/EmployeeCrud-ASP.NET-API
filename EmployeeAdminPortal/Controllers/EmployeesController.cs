@@ -31,6 +31,25 @@ namespace EmployeeAdminPortal.Controllers
             return Ok(allEmployees);
         }
 
+        // Action method to handle HTTP GET requests and retrieve an employee by ID
+        [HttpGet]
+        [Route("{id:guid}")]
+        public IActionResult GetEmployeeById(Guid id)
+        {
+            // Retrieves the employee with the specified ID from the database
+            var employee = dbContext.Employees.Find(id);
+
+            // Checks if the employee was found
+            if (employee is null)
+            {
+                // Returns an HTTP 404 Not Found response if the employee was not found
+                return NotFound();
+            }
+
+            // Returns an HTTP 200 OK response with the found employee entity
+            return Ok(employee);
+        }
+
         // Action method to handle HTTP POST requests and add a new employee
         [HttpPost]
         public IActionResult AddEmployee(AddEmployeeDto addEmployeeDto)
