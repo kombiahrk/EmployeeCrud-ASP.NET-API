@@ -1,4 +1,6 @@
 ﻿using EmployeeAdminPortal.Data;
+using EmployeeAdminPortal.Models;
+using EmployeeAdminPortal.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,6 +29,29 @@ namespace EmployeeAdminPortal.Controllers
 
             // Returns an HTTP 200 OK response with the list of employees
             return Ok(allEmployees);
+        }
+
+        // Action method to handle HTTP POST requests and add a new employee
+        [HttpPost]
+        public IActionResult AddEmployee(AddEmployeeDto addEmployeeDto)
+        {
+            // Maps the AddEmployeeDto to a new Employee entity
+            var employeeEntity = new Employee() 
+            { 
+                Name = addEmployeeDto.Name,
+                Email = addEmployeeDto.Email,
+                Phone = addEmployeeDto.Phone,
+                Salary = addEmployeeDto.Salary,
+            };
+
+            // Adds the new Employee entity to the database context
+            dbContext.Employees.Add(employeeEntity);
+
+            // Saves changes to the database
+            dbContext.SaveChanges();
+
+            // Returns an HTTP 200 OK response with the newly created employee entity
+            return Ok(employeeEntity);
         }
     }
 }
